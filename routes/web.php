@@ -11,8 +11,17 @@
 |
 */
 
-Route::get('/', function () {
-    return view('dashboard');
+use App\Http\Controllers\AuthController;
+
+
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    });
+
 });
 
 Route::group(['prefix' => 'email'], function(){

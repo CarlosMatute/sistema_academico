@@ -16,14 +16,15 @@
             <div class="auth-form-wrapper px-4 py-5">
               <a href="#" class="noble-ui-logo d-block mb-2">Noble<span>UI</span></a>
               <h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
-              <form class="forms-sample">
+              <form class="forms-sample" method="POST" action="{{ route('login') }}">
+              @csrf
                 <div class="mb-3">
-                  <label for="userEmail" class="form-label">Email address</label>
-                  <input type="email" class="form-control" id="userEmail" placeholder="Email">
+                  <label for="userEmail" class="form-label">Usuario</label>
+                  <input type="email" name="email" class="form-control" id="userEmail" placeholder="Usuario">
                 </div>
                 <div class="mb-3">
-                  <label for="userPassword" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Password">
+                  <label for="userPassword" class="form-label">Contraseña</label>
+                  <input type="password" name="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Contraseña">
                 </div>
                 <div class="form-check mb-3">
                   <input type="checkbox" class="form-check-input" id="authCheck">
