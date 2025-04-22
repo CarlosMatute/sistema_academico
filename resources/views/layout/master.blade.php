@@ -16,8 +16,9 @@ License: For each use you must have a valid license purchased only from above li
   <meta name="description" content="Responsive Laravel Admin Dashboard Template based on Bootstrap 5">
 	<meta name="author" content="NobleUI">
 	<meta name="keywords" content="nobleui, bootstrap, bootstrap 5, bootstrap5, admin, dashboard, template, responsive, css, sass, html, laravel, theme, front-end, ui kit, web">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>NobleUI - Laravel Admin Dashboard Template</title>
+  <title>TW ACADEMIC</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -28,7 +29,7 @@ License: For each use you must have a valid license purchased only from above li
   <!-- CSRF Token -->
   <meta name="_token" content="{{ csrf_token() }}">
   
-  <link rel="shortcut icon" href="{{ asset('/favicon.ico') }}">
+  <link rel="shortcut icon" href="{{ asset('/documentos/img/logo_tw_academic.png') }}">
 
   <!-- plugin css -->
   <link href="{{ asset('assets/fonts/feather-font/css/iconfont.css') }}" rel="stylesheet" />
@@ -36,6 +37,9 @@ License: For each use you must have a valid license purchased only from above li
   <!-- end plugin css -->
 
   @stack('plugin-styles')
+
+  {{-- custom css --}}
+  <link rel="stylesheet" href="{{ asset('/css/custom.css') }}" />
 
   <!-- common css -->
   <link href="{{ asset('css/app.css') }}" rel="stylesheet" />

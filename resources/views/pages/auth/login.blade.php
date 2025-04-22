@@ -1,45 +1,55 @@
 @extends('layout.master2')
 
 @section('content')
-<div class="page-content d-flex align-items-center justify-content-center">
+<div class="page-content d-flex align-items-center justify-content-center" style="background-color:#3f5981">
 
   <div class="row w-100 mx-0 auth-page">
     <div class="col-md-8 col-xl-6 mx-auto">
       <div class="card">
         <div class="row">
           <div class="col-md-4 pe-md-0">
-            <div class="auth-side-wrapper" style="background-image: url({{ url('https://via.placeholder.com/219x452') }})">
+            <div class="auth-side-wrapper" style="background-image: url({{ asset('/documentos/img/tw_academic.png') }})">
 
             </div>
           </div>
           <div class="col-md-8 ps-md-0">
             <div class="auth-form-wrapper px-4 py-5">
-              <a href="#" class="noble-ui-logo d-block mb-2">Noble<span>UI</span></a>
-              <h5 class="text-muted fw-normal mb-4">Welcome back! Log in to your account.</h5>
+              <a href="#" class="noble-ui-logo d-block mb-2">TW<span>ACADEMIC</span></a>
+              <h5 class="text-muted fw-normal mb-4">TECHNO WORLD ACADEMIC</h5>
               <form class="forms-sample" method="POST" action="{{ route('login') }}">
               @csrf
                 <div class="mb-3">
-                  <label for="userEmail" class="form-label">Usuario</label>
-                  <input type="email" name="email" class="form-control" id="userEmail" placeholder="Usuario">
+                  <label for="userEmail" class="form-label">Usuario ó Correo Electrónico</label>
+                  <input type="text" name="email" class="form-control" id="userEmail" placeholder="Escribe tu Usuario ó Correo Electrónico...">
                 </div>
                 <div class="mb-3">
                   <label for="userPassword" class="form-label">Contraseña</label>
-                  <input type="password" name="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Contraseña">
+                  <input type="password" name="password" class="form-control" id="userPassword" autocomplete="current-password" placeholder="Escribe tu Contraseña...">
                 </div>
-                <div class="form-check mb-3">
+                
+                    <div class="form-check mb-3" style="color: red;">
+                    @if ($errors->any())
+                            @foreach ($errors->all() as $error)
+                            <label class="form-check-label">{{ $error }}</label>
+                            @endforeach
+                            @endif
+                            </div>
+                      
+                
+                <!-- <div class="form-check mb-3">
                   <input type="checkbox" class="form-check-input" id="authCheck">
                   <label class="form-check-label" for="authCheck">
                     Remember me
                   </label>
-                </div>
+                </div> -->
                 <div>
-                  <a href="{{ url('/') }}" class="btn btn-primary me-2 mb-2 mb-md-0">Login</a>
-                  <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
+                  <button type="submit" class="btn btn-primary me-2 mb-2 mb-md-0">Ingresar</button>
+                <!--   <button type="button" class="btn btn-outline-primary btn-icon-text mb-2 mb-md-0">
                     <i class="btn-icon-prepend" data-feather="twitter"></i>
                     Login with twitter
-                  </button>
+                  </button>-->
                 </div>
-                <a href="{{ url('/auth/register') }}" class="d-block mt-3 text-muted">Not a user? Sign up</a>
+                <!--<a href="{{ url('/auth/register') }}" class="d-block mt-3 text-muted">Not a user? Sign up</a> -->
               </form>
             </div>
           </div>

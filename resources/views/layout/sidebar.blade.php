@@ -1,7 +1,7 @@
 <nav class="sidebar">
   <div class="sidebar-header">
     <a href="#" class="sidebar-brand">
-      Noble<span>UI</span>
+      TW<span>ACADEMIC</span>
     </a>
     <div class="sidebar-toggler not-active">
       <span></span>
@@ -11,14 +11,21 @@
   </div>
   <div class="sidebar-body">
     <ul class="nav">
-      <li class="nav-item nav-category">Main</li>
+      <li class="nav-item nav-category">Home</li>
       <li class="nav-item {{ active_class(['/']) }}">
         <a href="{{ url('/') }}" class="nav-link">
           <i class="link-icon" data-feather="box"></i>
           <span class="link-title">Dashboard</span>
         </a>
       </li>
-      <li class="nav-item nav-category">web apps</li>
+      <li class="nav-item nav-category">Docente</li>
+      <li class="nav-item {{ active_class(['instituciones']) }}">
+        <a href="{{ url('/instituciones') }}" class="nav-link">
+          <i class="link-icon" data-feather="home"></i>
+          <span class="link-title">Instituciones</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item nav-category">web apps</li>
       <li class="nav-item {{ active_class(['email/*']) }}">
         <a class="nav-link" data-bs-toggle="collapse" href="#email" role="button" aria-expanded="{{ is_active_route(['email/*']) }}" aria-controls="email">
           <i class="link-icon" data-feather="mail"></i>
@@ -308,11 +315,11 @@
           <i class="link-icon" data-feather="hash"></i>
           <span class="link-title">Documentation</span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </div>
 </nav>
-<nav class="settings-sidebar">
+<!-- <nav class="settings-sidebar">
   <div class="sidebar-body">
     <a href="#" class="settings-sidebar-toggler">
       <i data-feather="settings"></i>
@@ -328,4 +335,4 @@
       </a>
     </div>
   </div>
-</nav>
+</nav> -->

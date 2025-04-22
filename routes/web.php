@@ -12,15 +12,20 @@
 */
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InstitucionesController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
+    Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/', function () {
         return view('dashboard');
     });
+
+    Route::get('/instituciones', [InstitucionesController::class, 'ver_instituciones'])->name('instituciones');
+    Route::post('/instituciones/guardar', [InstitucionesController::class, 'guardar_instituciones']);
 
 });
 

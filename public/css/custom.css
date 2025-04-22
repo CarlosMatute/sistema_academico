@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+:root {
+    --negro: #323232;
+    --amarillo: #ffcc00;
+    --azul: #203b76;
+    --azulOscuro: #3f5981;
+    --azulClaro: #d1dae9;
+    --cafe: #5b3700;
+    --azulClaro2: #0094e9;
+    --blanco: #fff;
+    --gris6: #666;
+    --gris9: #999;
+    --rojo: #e30d0d;
+    --colorTexto: #303030;
+  }
+
+  /* body {
+    font-family: "Montserrat" !important;
+  } */
+
+  h1, h2, h3, h4, h5, h6, p, div, li, span {
+    color: var(--colorTexto) !important;
+  }
+
+  .border-primary{
+    border-color: var(--negro) !important;
+  }
+
+  .bg-primary, .bg-dark{
+    background-color: var(--azulOscuro) !important;
+    color: var(--blanco) !important;
+  }
+
+  .bg-negro{
+    background-color: var(--negro) !important;
+    color: var(--blanco) !important;
+  }
+
+  .bg-azul{
+    background-color: var(--azul) !important;
+    color: var(--blanco) !important;
+  }
+
+  .bg-azul-claro{
+    background-color: var(--azulClaro) !important;
+    color: var(--blanco) !important;
+  }
+
+  .nav-link::before{
+    background-color: var(--negro) !important;
+  }
+  
+  .sidebar .sidebar-body .nav .nav-item.active .nav-link .link-icon{
+    color: var(--azulOscuro) !important;
+  }
+
+  a.nav-link:hover{
+    color: var(--negro) !important;
+  }
+
+  span svg{
+    color: var(--negro) !important;
+  }
+
+  div.sidebar-header{
+    background-color: var(--azulOscuro) !important;
+  }
+
+  div.sidebar-body{
+    background-color: var(--azulClaro) !important;
+  }
+  
+  .sidebar-brand, .txt-blanco, div.sidebar-toggler span{
+    color: var(--blanco) !important;
+  }
+
+  
+  
+
+  /* Botones */
+
+  .btn-primary {
+    background-color: var(--negro) !important;
+    border: none !important;
+  }
+
+  .btn-azul {
+    background-color: var(--azul) !important;
+    border: none !important;
+  }
+
+  .btn-azul-claro {
+    background-color: var(--azulClaro) !important;
+    border: none !important;
+  }
+
+  .btn-primary:hover {
+    background-color: var(--azulOscuro) !important;
+    border: none !important;
+  }
+
+  /* .btn-azul-claro:hover {
+    background-color: var(--blanco) !important;
+    border: none !important;
+  } */
+
+  .btn-outline-primary{
+    color: var(--azulOscuro) !important;
+    border-color: var(--negro) !important;
+  }
+
+  .btn-outline-primary:hover{
+    color: var(--blanco) !important;
+    border-color: var(--azulOscuro) !important;
+    background-color: var(--azulOscuro) !important;
+  }
+
+  .bg-danger{
+    background-color: var(--rojo) !important;
+    border: none !important;
+  }
+  /* Fin Botones */
