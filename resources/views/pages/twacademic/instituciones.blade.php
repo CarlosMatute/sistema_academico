@@ -17,9 +17,9 @@
             <h5 class="lead bg-white"><div class="alert alert-fill-white" role="alert">Módulo de administracion de instituciones.</div></h5>
             <br />
             <div class="col-md-3">
-                <a class="btn btn-info btn-sm" id="btn_volver_convenio" href="{{url('setic/malla_validacion')}}" data-toggle="tooltip" data-placement="top" title="Regresar a Malla de Validaciones">
+                <!-- <a class="btn btn-info btn-sm" id="btn_volver_convenio" href="{{url('setic/malla_validacion')}}" data-toggle="tooltip" data-placement="top" title="Regresar a Malla de Validaciones">
                     <i class="btn-icon-prepend" data-feather="corner-up-left"></i> Regresar
-                </a>
+                </a> -->
             </div>
         </div>
         <hr />
@@ -72,6 +72,9 @@
                                         data-detalles="{{$row->detalles}}">
                                         <i data-feather="trash-2"></i>
                                     </button>
+                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/estudiantes" type="button" class="btn btn-success btn-icon btn-xs">
+                                        <i data-feather="users"></i>
+                                    </a>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -245,8 +248,8 @@
             accion = 1;
         });
 
-        $(".btn_editar").on("click", function () {
-            alert('Hey');
+        $("#tbl_instituciones tbody").on("click", ".btn_editar", function () {
+            //alert('Hey');
             accion = 2;
         });
 
@@ -286,7 +289,9 @@
         });
 
         $(".modal-footer").on("click", "#btn_eliminar_institucion", function () { 
-            guardar_institucion(); 
+            if(btn_activo){
+                guardar_institucion(); 
+            }
         }); 
 
         $("#tbl_instituciones tbody").on("click", "tr", function () {
@@ -298,10 +303,6 @@
 
 
         $("#btn_guardar_institucion").on("click", function () {
-            // Toast.fire({
-            //     icon: 'success',
-            //     title: 'Signed in successfully'
-            // })
             institucion = $("#institucion").val();
             siglas = $("#siglas").val();
             campus = $("#campus").val();
@@ -341,8 +342,8 @@
     });
 
     function guardar_institucion() {
-        //btn_activo = false;
-        console.log(accion);
+        btn_activo = false;
+        //console.log(accion);
         $.ajax({
             type: "post",
             url: url_guardar_institucion,
@@ -359,6 +360,7 @@
                     titleMsg = "Error al Cargar";
                     textMsg = data.msgError;
                     typeMsg = "error";
+                    btn_activo = true;
                 } else {
                     titleMsg = "Datos Cargados";
                     textMsg = data.msgSuccess;
@@ -400,6 +402,7 @@
                             $("#modal_eliminar").modal("hide");
                             table.row(rowNumber).remove().draw();
                         }  
+                        btn_activo = true;
                     
                 }
                 Toast.fire({

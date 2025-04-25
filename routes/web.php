@@ -13,6 +13,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstitucionesController;
+use App\Http\Controllers\EstudiantesController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -26,6 +27,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/instituciones', [InstitucionesController::class, 'ver_instituciones'])->name('instituciones');
     Route::post('/instituciones/guardar', [InstitucionesController::class, 'guardar_instituciones']);
+    Route::get('/instituciones/{id_institucion}/estudiantes', [EstudiantesController::class, 'ver_estudiantes']);
+    Route::post('/instituciones/estudiantes/guardar', [EstudiantesController::class, 'guardar_estudiantes']);
 
 });
 

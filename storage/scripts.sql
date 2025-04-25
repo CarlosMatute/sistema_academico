@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS public.users
 
 CREATE TABLE IF NOT EXISTS public.instituciones
 (
-    id integer NOT NULL DEFAULT nextval('instituciones_id_seq'::regclass),
+    id serial,
     nombre text COLLATE pg_catalog."default",
     siglas text COLLATE pg_catalog."default",
     campus text COLLATE pg_catalog."default",
@@ -26,4 +26,40 @@ CREATE TABLE IF NOT EXISTS public.instituciones
     updated_at timestamp(0) without time zone,
     deleted_at timestamp(0) without time zone,
     CONSTRAINT instituciones_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.estudiantes
+(
+    id serial,
+	numero_cuenta text,
+    primer_nombre text,
+    segundo_nombre text,
+    primer_apellido text,
+    segundo_apellido text,
+	correo_electronico text,
+	celular text,
+	carrera text,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT estudiantes_pkey PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.instituciones_estudiantes
+(
+    id serial,
+	id_institucion integer,
+    id_estudiante integer,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT instituciones_estudiantes_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_id_institucion FOREIGN KEY (id_institucion)
+        REFERENCES instituciones (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT fk_id_estudiante FOREIGN KEY (id_estudiante)
+        REFERENCES estudiantes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 );
