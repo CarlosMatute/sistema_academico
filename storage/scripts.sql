@@ -63,3 +63,22 @@ CREATE TABLE IF NOT EXISTS public.instituciones_estudiantes
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS public.periodos_academicos
+(
+    id serial,
+    periodo_academico integer,
+	anio_periodo_academico integer,
+    nombre text,
+	id_institucion integer,
+    fecha_inicio timestamp(0) without time zone,
+    fecha_fin timestamp(0) without time zone,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT periodos_academicos_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_id_institucion FOREIGN KEY (id_institucion)
+        REFERENCES instituciones (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);

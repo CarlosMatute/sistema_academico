@@ -14,6 +14,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstitucionesController;
 use App\Http\Controllers\EstudiantesController;
+use App\Http\Controllers\PeriodosAcademicosController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -29,6 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/instituciones/guardar', [InstitucionesController::class, 'guardar_instituciones']);
     Route::get('/instituciones/{id_institucion}/estudiantes', [EstudiantesController::class, 'ver_estudiantes']);
     Route::post('/instituciones/estudiantes/guardar', [EstudiantesController::class, 'guardar_estudiantes']);
+    Route::get('/instituciones/{id_institucion}/periodos_academicos', [PeriodosAcademicosController::class, 'ver_periodos_academicos']);
+    Route::post('/instituciones/periodos_academicos/guardar', [PeriodosAcademicosController::class, 'guardar_periodos_academicos']);
 
 });
 
