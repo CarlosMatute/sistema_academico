@@ -53,7 +53,7 @@ class EstudiantesController extends Controller
         $carrera = $request->carrera;
         $msgSuccess = null;
         $msgError = null;
-        $instituciones = null;
+        $estudiantes = null;
         
         if ($id == null && $accion == 2) {
             $accion = 1;
@@ -80,7 +80,7 @@ class EstudiantesController extends Controller
                 ["numero_cuenta" => $numero_cuenta, "primer_nombre" => $primer_nombre, "segundo_nombre" => $segundo_nombre, "primer_apellido" => $primer_apellido,
                 "segundo_apellido" => $segundo_apellido, "correo_electronico" => $correo_electronico, "celular" => $celular, "carrera" => $carrera]))->first();
 
-                $id_estudiante = $id->id;
+                $id = $id->id;
 
                 //throw new Exception($id_institucion.' '.$id_estudiante);
 
@@ -93,42 +93,57 @@ class EstudiantesController extends Controller
                         (:id_institucion, :id_estudiante);", ["id_institucion" => $id_institucion, "id_estudiante" => $id_estudiante]);
 
 
-                $msgSuccess = 'Registro '.$id_estudiante." creado correctamente.";
+                $msgSuccess = 'Registro '.$id." creado correctamente.";
             }elseif($accion == 2){
-                DB::select("UPDATE PUBLIC.INSTITUCIONES
+                DB::select("UPDATE PUBLIC.ESTUDIANTES
                     SET
-                        NOMBRE = :institucion,
-                        SIGLAS = :siglas,
-                        CAMPUS = :campus,
-                        DETALLES = :detalles,
+                        NUMERO_CUENTA = :numero_cuenta,
+                        PRIMER_NOMBRE = :primer_nombre,
+                        SEGUNDO_NOMBRE = :segundo_nombre,
+                        PRIMER_APELLIDO = :primer_apellido,
+                        SEGUNDO_APELLIDO = :segundo_apellido,
+                        CORREO_ELECTRONICO = :correo_electronico,
+                        CELULAR = :celular,
+                        CARRERA = :carrera,
                         UPDATED_AT = NOW()
                     WHERE
                         ID = :id;",
-                ["id" => $id, "institucion" => $institucion, "siglas" => $siglas, 
-                "campus" => $campus, "detalles" => $detalles]);
+                ["id" => $id, "numero_cuenta" => $numero_cuenta, "primer_nombre" => $primer_nombre, "segundo_nombre" => $segundo_nombre, "primer_apellido" => $primer_apellido,
+                "segundo_apellido" => $segundo_apellido, "correo_electronico" => $correo_electronico, "celular" => $celular, "carrera" => $carrera]);
 
                 $msgSuccess = 'Registro '.$id." editado correctamente.";
             }elseif($accion == 3){
-                DB::select("UPDATE PUBLIC.INSTITUCIONES SET DELETED_AT = NOW() WHERE ID = :id", ["id" => $id]);
+                DB::select("UPDATE PUBLIC.ESTUDIANTES SET DELETED_AT = NOW() WHERE ID = :id", ["id" => $id]);
 
                 $msgSuccess = 'Registro '.$id." eliminado correctamente.";
             }else{
                 $msgError = 'Acción Inválida.';
             }
 
-            // if($msgError == null){
-            //     $instituciones = DB::select("SELECT
-            //         ID,
-            //         NOMBRE,
-            //         SIGLAS,
-            //         CAMPUS,
-            //         DETALLES,
-            //         CREATED_AT
-            //     FROM
-            //         INSTITUCIONES
-            //     WHERE DELETED_AT IS NULL
-            //     AND ID = :id;", ["id" => $id]);
-            // }
+            if($msgError == null){
+                $estudiantes = DB::select("SELECT
+                    E.ID,
+                    E.NUMERO_CUENTA,
+                    TRIM(
+                        COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
+                    ) AS NOMBRE_ESTUDIANTE,
+                    E.PRIMER_NOMBRE,
+                    E.SEGUNDO_NOMBRE,
+                    E.PRIMER_APELLIDO,
+                    E.SEGUNDO_APELLIDO,
+                    E.CORREO_ELECTRONICO,
+                    E.CELULAR,
+                    E.CARRERA,
+                    E.CREATED_AT
+                FROM
+                    PUBLIC.ESTUDIANTES E
+                    JOIN INSTITUCIONES_ESTUDIANTES IE ON E.ID = IE.ID_ESTUDIANTE
+                WHERE
+                    E.DELETED_AT IS NULL
+                    AND IE.DELETED_AT IS NULL
+                    AND IE.ID_INSTITUCION = :id_institucion
+                    AND E.ID = :id;", ["id" => $id, "id_institucion" => $id_institucion]);
+            }
             //DB::commit();
         } catch (Exception $e) {
             // Manejo del error
@@ -139,7 +154,7 @@ class EstudiantesController extends Controller
         return response()->json([
             "msgSuccess" => $msgSuccess,
             "msgError" => $msgError,
-            "instituciones" => $instituciones
+            "estudiantes" => $estudiantes
         ]);
     }
 }
