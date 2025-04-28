@@ -82,3 +82,63 @@ CREATE TABLE IF NOT EXISTS public.periodos_academicos
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+CREATE TABLE IF NOT EXISTS public.asignaturas
+(
+    id serial,
+	id_asignatura text,
+    asignatura text,
+    detalle text,
+	id_institucion integer,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT asignaturas_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_id_institucion FOREIGN KEY (id_institucion)
+        REFERENCES instituciones (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS public.dias_semana 
+(
+    id SERIAL,
+    nombre TEXT NOT NULL,
+    abreviatura TEXT NOT NULL,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT dias_semana_pkey PRIMARY KEY (id)
+);
+
+INSERT INTO dias_semana (nombre, abreviatura) VALUES
+('Lunes', 'Lun'),
+('Martes', 'Mar'),
+('Miércoles', 'Mié'),
+('Jueves', 'Jue'),
+('Viernes', 'Vie'),
+('Sábado', 'Sáb'),
+('Domingo', 'Dom');
+
+CREATE TABLE IF NOT EXISTS public.secciones
+(
+    id serial,
+	nombre text,
+	aula text,
+	id_institucion integer,
+    id_asignatura integer,
+    fecha_hora_inicio time,
+	fecha_hora_fin time,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT secciones_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_id_institucion FOREIGN KEY (id_institucion)
+        REFERENCES instituciones (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT fk_id_asignatura FOREIGN KEY (id_asignatura)
+        REFERENCES asignaturas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);

@@ -4,6 +4,9 @@
   <link href="{{ asset('assets/plugins/flatpickr/flatpickr.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/plugins/datatables-net-bs5/dataTables.bootstrap5.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/plugins/pickr/themes/classic.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/plugins/flatpickr/flatpickr.min.css') }}" rel="stylesheet" />
+  <script src="{{ asset('assets/plugins/flatpickr/flatpickr.min.js') }}"></script>
 @endpush
 
 @section('content')
@@ -125,15 +128,23 @@
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-12 col-sm-12">
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label"><strong>Fecha Inicio</strong> <font class="text-danger">*</font></label>
-                                    <input type="date" id="fecha_inicio" class="form-control" placeholder="Ingresa la fecha inicio" />
+                                    <input type="text" id="fecha_inicio" class="form-control" placeholder="Ingresa la fecha inicio" data-input>
+                                </div> -->
+                                <div class="mb-3" id="flatpickr-date">
+                                    <label class="form-label"><strong>Fecha Inicio</strong> <font class="text-danger">*</font></label>
+                                    <input type="text" id="fecha_inicio" class="form-control" placeholder="Ingresa la fecha inicio" data-input>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-12 col-sm-12">
-                                <div class="mb-3">
+                                <!-- <div class="mb-3">
                                     <label class="form-label"><strong>Fecha Fin</strong> <font class="text-danger">*</font></label>
                                     <input type="date" id="fecha_fin" class="form-control" placeholder="Ingresa la fecha fin" />
+                                </div> -->
+                                <div class="mb-3" id="flatpickr-date">
+                                    <label class="form-label"><strong>Fecha Inicio</strong> <font class="text-danger">*</font></label>
+                                    <input type="text" id="fecha_fin" class="form-control" placeholder="Ingresa la fecha fin" data-input>
                                 </div>
                             </div>
                             <!-- Col -->
@@ -196,11 +207,13 @@
   <script src="{{ asset('assets/plugins/datatables-net/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('assets/plugins/datatables-net-bs5/dataTables.bootstrap5.js') }}"></script>
   <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+  <script src="{{ asset('assets/plugins/flatpickr/flatpickr.min.js') }}"></script>
 @endpush
 @push('custom-scripts')
   <script src="{{ asset('assets/js/dashboard.js') }}"></script>
   <script src="{{ asset('assets/js/data-table.js') }}"></script>
   <script src="{{ asset('assets/js/sweet-alert.js') }}"></script>
+  <!-- <script src="{{ asset('assets/js/flatpickr.js') }}"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=mzutkZDE"></script>
   <script type="text/javascript">
@@ -223,6 +236,14 @@
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
         });
+
+        if($('#flatpickr-date').length) {
+            flatpickr("#flatpickr-date", {
+            wrap: true,
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            });
+        }
 
         table = $("#tbl_periodos_academicos").DataTable({
             aLengthMenu: [

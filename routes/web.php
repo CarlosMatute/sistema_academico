@@ -15,6 +15,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InstitucionesController;
 use App\Http\Controllers\EstudiantesController;
 use App\Http\Controllers\PeriodosAcademicosController;
+use App\Http\Controllers\AsignaturasController;
+use App\Http\Controllers\SeccionesController;
 
 
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -32,7 +34,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/instituciones/estudiantes/guardar', [EstudiantesController::class, 'guardar_estudiantes']);
     Route::get('/instituciones/{id_institucion}/periodos_academicos', [PeriodosAcademicosController::class, 'ver_periodos_academicos']);
     Route::post('/instituciones/periodos_academicos/guardar', [PeriodosAcademicosController::class, 'guardar_periodos_academicos']);
-
+    Route::get('/instituciones/{id_institucion}/asignaturas', [AsignaturasController::class, 'ver_asignaturas']);
+    Route::post('/instituciones/asignaturas/guardar', [AsignaturasController::class, 'guardar_asignaturas']);
+    Route::get('/instituciones/{id_institucion}/secciones', [SeccionesController::class, 'ver_secciones']);
 });
 
 Route::group(['prefix' => 'email'], function(){

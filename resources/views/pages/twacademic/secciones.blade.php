@@ -4,6 +4,10 @@
   <link href="{{ asset('assets/plugins/flatpickr/flatpickr.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/plugins/datatables-net-bs5/dataTables.bootstrap5.css') }}" rel="stylesheet" />
   <link href="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/plugins/pickr/themes/classic.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('assets/plugins/flatpickr/flatpickr.min.css') }}" rel="stylesheet" />
+  <script src="{{ asset('assets/plugins/flatpickr/flatpickr.min.js') }}"></script>
+  <link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet" />
 @endpush
 
 @section('content')
@@ -11,79 +15,72 @@
     <div class="col-12 col-md-12 col-xl-12">
         <div class="alert alert-dark bg-azul-claro" role="alert">
             <h4 class="display-4 d-flex align-items-center">
-                <i data-feather="home" class="me-3" style="width: 45px; height: 45px;"></i>
-                <strong>INSTITUCIONES</strong>
+                <i data-feather="bookmark" class="me-3" style="width: 45px; height: 45px;"></i>
+                <strong>SECCIONES</strong>
             </h4>
-            <h5 class="lead bg-white"><div class="alert alert-fill-white" role="alert">Módulo de administracion de instituciones.</div></h5>
+            <h5 class="lead bg-white"><div class="alert alert-fill-white" role="alert">Módulo de administracion de secciones.</div></h5>
             <br />
             <div class="col-md-3">
-                <!-- <a class="btn btn-info btn-sm" id="btn_volver_convenio" href="{{url('setic/malla_validacion')}}" data-toggle="tooltip" data-placement="top" title="Regresar a Malla de Validaciones">
+                <a class="btn btn-info btn-sm" id="btn_volver_convenio" href="{{url('instituciones')}}" data-toggle="tooltip" data-placement="top" title="Regresar a Malla de Validaciones">
                     <i class="btn-icon-prepend" data-feather="corner-up-left"></i> Regresar
-                </a> -->
+                </a>
             </div>
         </div>
         <hr />
         <div class="col-12 col-md-12 col-xl-12">
             <div class="card border-secondary">
                 <h5 class="card-header bg-azul text-white d-flex justify-content-between align-items-center">
-                    <span class="text-white"> <i class="text-white icon-lg pb-3px" data-feather="list"></i> Instituciones </span>
-                    <button type="button" id="btn_agregar" class="btn btn-azul-claro btn-sm" data-bs-toggle="modal" data-bs-target=".modal_instituciones">
+                    <span class="text-white"> <i class="text-white icon-lg pb-3px" data-feather="list"></i> Secciones </span>
+                    <button type="button" id="btn_agregar" class="btn btn-azul-claro btn-sm" data-bs-toggle="modal" data-bs-target=".modal_asignaturas">
                         <i class="btn-icon-prepend" data-feather="plus" style="width: 20px; height: 20px;"></i> Agregar
                     </button>
                 </h5>
-
+                <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
+                                    <select class="js-example-basic-single form-select" data-width="100%">
+                                        @foreach($periodos_academicos as $row)
+                                            <option value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @endforeach
+                                    </select>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="jambo_table table table-hover" id="tbl_instituciones" border="1">
+                        <table class="jambo_table table table-hover" id="tbl_secciones" border="1">
                             <thead class="bg-negro">
                                 <tr class="headings">
                                     <th scope="col" class="text-white">ID</th>
-                                    <th scope="col" class="text-white">Institución</th>
-                                    <th scope="col" class="text-white">Siglas</th>
-                                    <th scope="col" class="text-white">Campus</th>
+                                    <th scope="col" class="text-white">ID Asignatura</th>
+                                    <th scope="col" class="text-white">Asignatura</th>
+                                    <th scope="col" class="text-white">Detalle</th>
                                     <th scope="col" class="text-white">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($instituciones as $row)
+                                @foreach ($asignaturas as $row)
                                 <tr style="font-size: small;">
                                     <td scope="row">{{$row->id}}</td>
-                                    <td scope="row">{{$row->nombre}}</td>
-                                    <td scope="row">{{$row->siglas}}</td>
-                                    <td scope="row">{{$row->campus}}</td>
+                                    <td scope="row">{{$row->id_asignatura}}</td>
+                                    <td scope="row">{{$row->asignatura}}</td>
+                                    <td scope="row">{{$row->detalle}}</td>
                                     <td scope="row">
-                                    <button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" 
-                                        data-bs-toggle="modal" 
-                                        data-bs-target=".modal_instituciones"
-                                        data-id="{{$row->id}}"
-                                        data-nombre="{{$row->nombre}}"
-                                        data-siglas="{{$row->siglas}}"
-                                        data-campus="{{$row->campus}}"
-                                        data-detalles="{{$row->detalles}}">
-                                        <i data-feather="edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger btn-icon btn-xs"
-                                        data-bs-toggle="modal" 
-                                        data-bs-target=".modal_eliminar"
-                                        data-id="{{$row->id}}"
-                                        data-nombre="{{$row->nombre}}"
-                                        data-siglas="{{$row->siglas}}"
-                                        data-campus="{{$row->campus}}"
-                                        data-detalles="{{$row->detalles}}">
-                                        <i data-feather="trash-2"></i>
-                                    </button>
-                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/estudiantes" type="button" class="btn btn-success btn-icon btn-xs">
-                                        <i data-feather="users"></i>
-                                    </a>
-                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/periodos_academicos" type="button" class="btn btn-info btn-icon btn-xs">
-                                        <i data-feather="calendar"></i>
-                                    </a>
-                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/asignaturas" type="button" class="btn btn-light btn-icon btn-xs">
-                                        <i data-feather="book"></i>
-                                    </a>
-                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/secciones" type="button" class="btn btn-primary btn-icon btn-xs">
-                                        <i data-feather="bookmark"></i>
-                                    </a>
+                                        <button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" 
+                                            data-bs-toggle="modal" 
+                                            data-bs-target=".modal_asignaturas"
+                                            data-id="{{$row->id}}"
+                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-asignatura="{{$row->asignatura}}"
+                                            data-detalle="{{$row->detalle}}"
+                                            >
+                                            <i data-feather="edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-icon btn-xs"
+                                            data-bs-toggle="modal" 
+                                            data-bs-target=".modal_eliminar"
+                                            data-id="{{$row->id}}"
+                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-asignatura="{{$row->asignatura}}"
+                                            data-detalle="{{$row->detalle}}"
+                                            >
+                                            <i data-feather="trash-2"></i>
+                                        </button>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -97,45 +94,41 @@
 </div>
 
 <!-- Extra large modal -->
-<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".modal_instituciones">Extra large modal</button> -->
-<div class="modal fade modal_instituciones" id="modal_instituciones" tabindex="-1" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target=".modal_asignaturas">Extra large modal</button> -->
+<div class="modal fade modal_asignaturas" id="modal_asignaturas" tabindex="-1" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-azul">
-                <h5 class="modal-title h4 text-white" id="myExtraLargeModalLabel"><i class="icon-lg pb-3px" data-feather="plus"></i> Registrar Institución</h5>
+                <h5 class="modal-title h4 text-white" id="myExtraLargeModalLabel"><i class="icon-lg pb-3px" data-feather="plus"></i> Registrar Asignaturas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-12 grid-margin">
                         <div class="row">
+                            <div class="col-lg-2 col-md-12 col-sm-12">
+                                <div class="mb-3">
+                                <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
+                                    <select class="js-example-basic-single form-select" data-width="100%">
+                                        @foreach($periodos_academicos as $row)
+                                            <option value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @endforeach
+                                    </select>
+                                    <!-- <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
+                                    <input type="text" id="id_asignatura" class="form-control" placeholder="Ingresa el ID de la asignatura" /> -->
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-12 col-sm-12">
+                                <div class="mb-3">
+                                    <label class="form-label"><strong>Asignatura</strong> <font class="text-danger">*</font></label>
+                                    <input type="text" id="asignatura" class="form-control" placeholder="Ingresa la asignatura" />
+                                </div>
+                            </div>
+                            <!-- Col -->
                             <div class="col-lg-6 col-md-12 col-sm-12">
                                 <div class="mb-3">
-                                    <label class="form-label"><strong>Institución</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="institucion" class="form-control" placeholder="Ingresa el nombre de la institución" />
-                                </div>
-                            </div>
-                            <!-- Col -->
-                            <div class="col-lg-3 col-md-12 col-sm-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>Siglas</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="siglas" class="form-control" placeholder="Ingresa el campus" />
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-12 col-sm-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>Campus</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="campus" class="form-control" placeholder="Ingresa las siglas" />
-                                </div>
-                            </div>
-                            <!-- Col -->
-                        </div>
-                        <!-- Row -->
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="mb-3">
-                                    <label class="form-label"><strong>Detalles</strong></label>
-                                    <input type="text" id="detalles" class="form-control" placeholder="Ingress detalles si existen" />
+                                    <label class="form-label"><strong>Detalle</strong></label>
+                                    <input type="text" id="detalle" class="form-control" placeholder="Ingresa el detalle" />
                                 </div>
                             </div>
                         </div>
@@ -145,7 +138,7 @@
             </div>
             <div class="modal-footer bg-negro">
                 <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-azul-claro btn-sm" id="btn_guardar_institucion">Guardar</button>
+                <button type="button" class="btn btn-azul-claro btn-sm" id="btn_guardar_asignatura">Guardar</button>
             </div>
         </div>
     </div>
@@ -172,7 +165,7 @@
                                     <div class="mb-3">
                                         <h4><label class="form-label"><strong>¿Realmente deseas eliminar este registro?</strong></label></h4>
                                         <br>
-                                        <h5><label class="form-label" id="modal_institucion"></label></h5>
+                                        <h5><label class="form-label" id="modal_estudiante"></label></h5>
                                         <br>
                                         <p class="fw-normal">Este proceso no se puede revertir</p>
                                     </div>
@@ -185,7 +178,7 @@
             </div>
             <div class="modal-footer bg-negro">
                 <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-azul-claro btn-sm" id="btn_eliminar_institucion">Eliminar</button>
+                <button type="button" class="btn btn-azul-claro btn-sm" id="btn_eliminar_estudiante">Eliminar</button>
             </div>
         </div>
     </div>
@@ -197,25 +190,28 @@
   <script src="{{ asset('assets/plugins/datatables-net/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('assets/plugins/datatables-net-bs5/dataTables.bootstrap5.js') }}"></script>
   <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+  <script src="{{ asset('assets/plugins/flatpickr/flatpickr.min.js') }}"></script>
+  <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
 @endpush
 @push('custom-scripts')
   <script src="{{ asset('assets/js/dashboard.js') }}"></script>
   <script src="{{ asset('assets/js/data-table.js') }}"></script>
   <script src="{{ asset('assets/js/sweet-alert.js') }}"></script>
+  <script src="{{ asset('assets/js/select2.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script src="https://code.responsivevoice.org/responsivevoice.js?key=mzutkZDE"></script>
   <script type="text/javascript">
     var table = null;
     var accion = null;
     var btn_activo = true;
+    var id_institucion = "{{$id_institucion}}"
     var id = null;
-    var institucion = null;
-    var siglas = null;
-    var campus = null;
-    var detalles = null;
+    var id_asignatura = null;
+    var asignatura = null;
+    var detalle = null;
     var rowNumber = null; 
-    var url_guardar_institucion = "{{url('/instituciones/guardar')}}"; 
-    var id_seleccionar = localStorage.getItem("tbl_instituciones_id_seleccionar");
+    var url_guardar_asignatura = "{{url('/instituciones/asignaturas/guardar')}}"; 
+    var id_seleccionar = localStorage.getItem("tbl_secciones_id_seleccionar");
     $(document).ready(function () {
         $.ajaxSetup({
             headers: {
@@ -223,7 +219,15 @@
             },
         });
 
-        table = $("#tbl_instituciones").DataTable({
+        if($('#flatpickr-date').length) {
+            flatpickr("#flatpickr-date", {
+            wrap: true,
+            enableTime: true,
+            dateFormat: "Y-m-d H:i",
+            });
+        }
+
+        table = $("#tbl_secciones").DataTable({
             aLengthMenu: [
                 [10, 30, 50, 100, -1],
                 [10, 30, 50, 100, "Todo"],
@@ -257,12 +261,12 @@
             accion = 1;
         });
 
-        $("#tbl_instituciones tbody").on("click", ".btn_editar", function () {
+        $("#tbl_secciones tbody").on("click", ".btn_editar", function () {
             //alert('Hey');
             accion = 2;
         });
 
-        $("#tbl_instituciones").each(function () {
+        $("#tbl_secciones").each(function () {
             var datatable = $(this);
             // SEARCH - Add the placeholder for Search and Turn this into in-line form control
             var search_input = datatable.closest(".dataTables_wrapper").find("div[id$=_filter] input");
@@ -273,76 +277,65 @@
             length_sel.removeClass("form-control-sm");
         });
 
-        $("#modal_instituciones").on("show.bs.modal", function (e) {
+        $("#modal_asignaturas").on("show.bs.modal", function (e) {
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            institucion = triggerLink.data("nombre");
-            siglas = triggerLink.data("siglas");
-            campus = triggerLink.data("campus");
-            detalles = triggerLink.data("detalles");
-            $("#institucion").val(institucion);
-            $("#siglas").val(siglas);
-            $("#campus").val(campus);
-            $("#detalles").val(detalles);
+            id_asignatura = triggerLink.data("id_asignatura");
+            asignatura  = triggerLink.data("asignatura");
+            detalle = triggerLink.data("detalle");
+            $("#id_asignatura").val(id_asignatura);
+            $("#asignatura").val(asignatura);
+            $("#detalle").val(detalle);
+            $(".js-example-basic-single").select2();
         });
 
         $("#modal_eliminar").on("show.bs.modal", function (e) {
             accion = 3;
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            institucion = triggerLink.data("nombre");
-            siglas = triggerLink.data("siglas");
-            campus = triggerLink.data("campus");
-            detalles = triggerLink.data("detalles");
-            $("#modal_institucion").html(institucion);
+            id_asignatura = triggerLink.data("id_asignatura");
+            asignatura  = triggerLink.data("asignatura");
+            detalle = triggerLink.data("detalle");
+            $("#modal_estudiante").html(id_asignatura);
         });
 
-        $(".modal-footer").on("click", "#btn_eliminar_institucion", function () { 
+        $(".modal-footer").on("click", "#btn_eliminar_estudiante", function () { 
             if(btn_activo){
-                guardar_institucion(); 
+                guardar_id_asignatura(); 
             }
         }); 
 
-        $("#tbl_instituciones tbody").on("click", "tr", function () {
+        $("#tbl_secciones tbody").on("click", "tr", function () {
             rowNumber = parseInt(table.row(this).index());
             table.$("tr.selected").removeClass("selected");
             $(this).addClass("selected");
-            localStorage.setItem("tbl_instituciones_id_seleccionar", table.row(this).data()[0]);
+            localStorage.setItem("tbl_secciones_id_seleccionar", table.row(this).data()[0]);
         });
 
 
-        $("#btn_guardar_institucion").on("click", function () {
-            institucion = $("#institucion").val();
-            siglas = $("#siglas").val();
-            campus = $("#campus").val();
-            detalles = $("#detalles").val();
+        $("#btn_guardar_asignatura").on("click", function () {
+            id_asignatura = $("#id_asignatura").val();
+            asignatura  = $("#asignatura").val();
+            detalle = $("#detalle").val();
 
-            if(institucion == null || institucion == ''){
+            if(id_asignatura == null || id_asignatura == ''){
                 Toast.fire({
                     icon: 'error',
-                    title: 'Valor requerido para Institución.'
+                    title: 'Valor requerido para Periódo Académico.'
                 })
                 return true;
             }
 
-            if(siglas == null || siglas == ''){
+            if(asignatura == null || asignatura == ''){
                 Toast.fire({
                     icon: 'error',
-                    title: 'Valor requerido para Siglas.'
-                })
-                return true;
-            }
-
-            if(campus == null || campus == ''){
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Valor requerido para Campus.'
+                    title: 'Valor requerido para Año.'
                 })
                 return true;
             }
 
             if(btn_activo){
-                guardar_institucion();
+                guardar_id_asignatura();
             }
             
 
@@ -350,19 +343,19 @@
 
     });
 
-    function guardar_institucion() {
+    function guardar_id_asignatura() {
         btn_activo = false;
         //console.log(accion);
         $.ajax({
             type: "post",
-            url: url_guardar_institucion,
+            url: url_guardar_asignatura,
             data: {
                 accion: accion,
+                id_institucion : id_institucion,
                 id: id,
-                institucion: institucion,
-                siglas: siglas,
-                campus: campus,
-                detalles: detalles,
+                id_asignatura : id_asignatura,
+                asignatura : asignatura,
+                detalle : detalle,
             },
             success: function (data) {
                 if (data.msgError != null) {
@@ -374,36 +367,36 @@
                     titleMsg = "Datos Cargados";
                     textMsg = data.msgSuccess;
                     typeMsg = "success";
-                    for(var i = 0; i < data.instituciones.length; i++) { 
-                        var row= data.instituciones[i]; 
+                    for(var i = 0; i < data.asignaturas.length; i++) { 
+                        var row= data.asignaturas[i]; 
                         var nuevaFilaDT=[ 
-                                     row.id,row.nombre,row.siglas, row.campus,
+                                     row.id,row.id_asignatura,row.asignatura,row.detalle,
                                       '<button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" ' +
                                         'data-bs-toggle="modal" ' +
-                                        'data-bs-target=".modal_instituciones" ' +
+                                        'data-bs-target=".modal_asignaturas" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-nombre="' + row.nombre + '" ' +
-                                        'data-siglas="' + row.siglas + '" ' +
-                                        'data-campus="' + row.campus + '" ' +
-                                        'data-detalles="' + row.detalles + '"> ' +
+                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-asignatura="' + row.asignatura + '" ' +
+                                            'data-detalle="' + row.detalle + '" ' +
+                                            '>'+
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg> ' +
                                     '</button> ' +
                                     '<button type="button" class="btn btn-danger btn-icon btn-xs" ' +
                                         'data-bs-toggle="modal" ' +
                                         'data-bs-target=".modal_eliminar" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-nombre="' + row.nombre + '" ' +
-                                        'data-siglas="' + row.siglas + '" ' +
-                                        'data-campus="' + row.campus + '" ' +
-                                        'data-detalles="' + row.detalles + '"> ' +
+                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-asignatura="' + row.asignatura + '" ' +
+                                            'data-detalle="' + row.detalle + '" ' +
+                                            '>'+
                                         '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> ' +
                                     '</button>'
                                      ]; 
                                     if(accion==1) {
-                                        $("#modal_instituciones").modal('hide');
+                                        $("#modal_asignaturas").modal('hide');
                                         table.row.add(nuevaFilaDT).draw();
                                     }else if (accion==2) {
-                                        $("#modal_instituciones").modal('hide');
+                                        $("#modal_asignaturas").modal('hide');
                                         table.row(rowNumber).data(nuevaFilaDT);
                                     } 
                     }
@@ -414,6 +407,7 @@
                         btn_activo = true;
                     
                 }
+                console.log(textMsg);
                 Toast.fire({
                     icon: typeMsg,
                     title: textMsg
