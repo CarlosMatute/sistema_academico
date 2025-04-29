@@ -35,39 +35,36 @@
                         <i class="btn-icon-prepend" data-feather="plus" style="width: 20px; height: 20px;"></i> Agregar
                     </button>
                 </h5>
-                <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <select class="js-example-basic-single form-select" data-width="100%">
-                                        @foreach($periodos_academicos as $row)
-                                            <option value="{{$row->id}}">{{$row->nombre}}</option>
-                                        @endforeach
-                                    </select>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="jambo_table table table-hover" id="tbl_secciones" border="1">
                             <thead class="bg-negro">
                                 <tr class="headings">
                                     <th scope="col" class="text-white">ID</th>
-                                    <th scope="col" class="text-white">ID Asignatura</th>
-                                    <th scope="col" class="text-white">Asignatura</th>
-                                    <th scope="col" class="text-white">Detalle</th>
+                                    <th scope="col" class="text-white">Sección</th>
+                                    <th scope="col" class="text-white">Aula</th>
+                                    <th scope="col" class="text-white">Hora Inicio</th>
+                                    <th scope="col" class="text-white">Hora Fin</th>
                                     <th scope="col" class="text-white">Opciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($asignaturas as $row)
+                                @foreach ($secciones as $row)
                                 <tr style="font-size: small;">
                                     <td scope="row">{{$row->id}}</td>
-                                    <td scope="row">{{$row->id_asignatura}}</td>
-                                    <td scope="row">{{$row->asignatura}}</td>
-                                    <td scope="row">{{$row->detalle}}</td>
+                                    <td scope="row">{{$row->nombre}}</td>
+                                    <td scope="row">{{$row->aula}}</td>
+                                    <td scope="row">{{$row->hora_inicio}}</td>
+                                    <td scope="row">{{$row->hora_fin}}</td>
                                     <td scope="row">
                                         <button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" 
                                             data-bs-toggle="modal" 
                                             data-bs-target=".modal_asignaturas"
                                             data-id="{{$row->id}}"
-                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-id_periodo_academico="{{$row->nombre}}"
                                             data-asignatura="{{$row->asignatura}}"
-                                            data-detalle="{{$row->detalle}}"
+                                            data-detalle="{{$row->hora_inicio}}"
+                                            data-detalle="{{$row->hora_fin}}"
                                             >
                                             <i data-feather="edit"></i>
                                         </button>
@@ -75,9 +72,10 @@
                                             data-bs-toggle="modal" 
                                             data-bs-target=".modal_eliminar"
                                             data-id="{{$row->id}}"
-                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-id_periodo_academico="{{$row->nombre}}"
                                             data-asignatura="{{$row->asignatura}}"
-                                            data-detalle="{{$row->detalle}}"
+                                            data-detalle="{{$row->hora_inicio}}"
+                                            data-detalle="{{$row->hora_fin}}"
                                             >
                                             <i data-feather="trash-2"></i>
                                         </button>
@@ -99,7 +97,7 @@
     <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-azul">
-                <h5 class="modal-title h4 text-white" id="myExtraLargeModalLabel"><i class="icon-lg pb-3px" data-feather="plus"></i> Registrar Asignaturas</h5>
+                <h5 class="modal-title h4 text-white" id="myExtraLargeModalLabel"><i class="icon-lg pb-3px" data-feather="plus"></i> Registrar Sección</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
             </div>
             <div class="modal-body">
@@ -109,13 +107,13 @@
                             <div class="col-lg-2 col-md-12 col-sm-12">
                                 <div class="mb-3">
                                 <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <select class="js-example-basic-single form-select" data-width="100%">
+                                    <select class="js-example-basic-single form-select" id="id_periodo_academico" data-width="100%">
                                         @foreach($periodos_academicos as $row)
                                             <option value="{{$row->id}}">{{$row->nombre}}</option>
                                         @endforeach
                                     </select>
                                     <!-- <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="id_asignatura" class="form-control" placeholder="Ingresa el ID de la asignatura" /> -->
+                                    <input type="text" id="id_periodo_academico" class="form-control" placeholder="Ingresa el ID de la asignatura" /> -->
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-12 col-sm-12">
@@ -206,7 +204,7 @@
     var btn_activo = true;
     var id_institucion = "{{$id_institucion}}"
     var id = null;
-    var id_asignatura = null;
+    var id_periodo_academico = null;
     var asignatura = null;
     var detalle = null;
     var rowNumber = null; 
@@ -226,6 +224,13 @@
             dateFormat: "Y-m-d H:i",
             });
         }
+
+        $('#modal_asignaturas').on('shown.bs.modal', function () {
+            $('.js-example-basic-single').select2({
+                dropdownParent: $('#modal_asignaturas'),
+                width: '100%'
+            });
+        });
 
         table = $("#tbl_secciones").DataTable({
             aLengthMenu: [
@@ -280,28 +285,27 @@
         $("#modal_asignaturas").on("show.bs.modal", function (e) {
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            id_asignatura = triggerLink.data("id_asignatura");
+            id_periodo_academico = triggerLink.data("id_periodo_academico");
             asignatura  = triggerLink.data("asignatura");
             detalle = triggerLink.data("detalle");
-            $("#id_asignatura").val(id_asignatura);
+            $("#id_periodo_academico").val(id_periodo_academico);
             $("#asignatura").val(asignatura);
             $("#detalle").val(detalle);
-            $(".js-example-basic-single").select2();
         });
 
         $("#modal_eliminar").on("show.bs.modal", function (e) {
             accion = 3;
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            id_asignatura = triggerLink.data("id_asignatura");
+            id_periodo_academico = triggerLink.data("id_periodo_academico");
             asignatura  = triggerLink.data("asignatura");
             detalle = triggerLink.data("detalle");
-            $("#modal_estudiante").html(id_asignatura);
+            $("#modal_estudiante").html(id_periodo_academico);
         });
 
         $(".modal-footer").on("click", "#btn_eliminar_estudiante", function () { 
             if(btn_activo){
-                guardar_id_asignatura(); 
+                guardar_id_periodo_academico(); 
             }
         }); 
 
@@ -314,11 +318,11 @@
 
 
         $("#btn_guardar_asignatura").on("click", function () {
-            id_asignatura = $("#id_asignatura").val();
+            id_periodo_academico = $("#id_periodo_academico").val();
             asignatura  = $("#asignatura").val();
             detalle = $("#detalle").val();
 
-            if(id_asignatura == null || id_asignatura == ''){
+            if(id_periodo_academico == null || id_periodo_academico == ''){
                 Toast.fire({
                     icon: 'error',
                     title: 'Valor requerido para Periódo Académico.'
@@ -335,7 +339,7 @@
             }
 
             if(btn_activo){
-                guardar_id_asignatura();
+                guardar_id_periodo_academico();
             }
             
 
@@ -343,7 +347,7 @@
 
     });
 
-    function guardar_id_asignatura() {
+    function guardar_id_periodo_academico() {
         btn_activo = false;
         //console.log(accion);
         $.ajax({
@@ -353,7 +357,7 @@
                 accion: accion,
                 id_institucion : id_institucion,
                 id: id,
-                id_asignatura : id_asignatura,
+                id_periodo_academico : id_periodo_academico,
                 asignatura : asignatura,
                 detalle : detalle,
             },
@@ -370,12 +374,12 @@
                     for(var i = 0; i < data.asignaturas.length; i++) { 
                         var row= data.asignaturas[i]; 
                         var nuevaFilaDT=[ 
-                                     row.id,row.id_asignatura,row.asignatura,row.detalle,
+                                     row.id,row.id_periodo_academico,row.asignatura,row.detalle,
                                       '<button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" ' +
                                         'data-bs-toggle="modal" ' +
                                         'data-bs-target=".modal_asignaturas" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-id_periodo_academico="' + row.id_periodo_academico + '" ' +
                                         'data-asignatura="' + row.asignatura + '" ' +
                                             'data-detalle="' + row.detalle + '" ' +
                                             '>'+
@@ -385,7 +389,7 @@
                                         'data-bs-toggle="modal" ' +
                                         'data-bs-target=".modal_eliminar" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-id_periodo_academico="' + row.id_periodo_academico + '" ' +
                                         'data-asignatura="' + row.asignatura + '" ' +
                                             'data-detalle="' + row.detalle + '" ' +
                                             '>'+
