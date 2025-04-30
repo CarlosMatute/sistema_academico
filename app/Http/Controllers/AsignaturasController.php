@@ -15,7 +15,7 @@ class AsignaturasController extends Controller
     public function ver_asignaturas($id_institucion){
         $asignaturas = DB::select("SELECT
                     ID,
-                    ID_ASIGNATURA,
+                    CODIGO_ASIGNATURA,
                     ASIGNATURA,
                     DETALLE,
                     ID_INSTITUCION,
@@ -34,7 +34,7 @@ class AsignaturasController extends Controller
         $accion = $request->accion;
         $id_institucion = $request->id_institucion;
         $id = $request->id;
-        $id_asignatura = $request->id_asignatura;
+        $codigo_asignatura = $request->codigo_asignatura;
         $asignatura = $request->asignatura;
         $detalle = $request->detalle;
         $msgSuccess = null;
@@ -51,15 +51,15 @@ class AsignaturasController extends Controller
             if($accion == 1){
                 $id = collect(\DB::select("INSERT INTO
                         PUBLIC.ASIGNATURAS (
-                            ID_ASIGNATURA,
+                            CODIGO_ASIGNATURA,
                             ASIGNATURA,
                             DETALLE,
                             ID_INSTITUCION
                         )
                     VALUES
-                        (:id_asignatura, :asignatura, :detalle, :id_institucion)
+                        (:codigo_asignatura, :asignatura, :detalle, :id_institucion)
                     RETURNING ID;",
-                ["id_asignatura" => $id_asignatura, "asignatura" => $asignatura, "detalle" => $detalle, "id_institucion" => $id_institucion]))->first();
+                ["codigo_asignatura" => $codigo_asignatura, "asignatura" => $asignatura, "detalle" => $detalle, "id_institucion" => $id_institucion]))->first();
 
                 $id = $id->id;
 
@@ -69,14 +69,14 @@ class AsignaturasController extends Controller
             }elseif($accion == 2){
                 DB::select("UPDATE PUBLIC.ASIGNATURAS
                     SET
-                        ID_ASIGNATURA = :id_asignatura,
+                        codigo_ASIGNATURA = :codigo_asignatura,
                         ASIGNATURA = :asignatura,
                         DETALLE = :detalle,
                         ID_INSTITUCION = :id_institucion,
                         UPDATED_AT = NOW()
                     WHERE
                         ID = :id;",
-                ["id" => $id, "id_asignatura" => $id_asignatura, "asignatura" => $asignatura, "detalle" => $detalle, "id_institucion" => $id_institucion]);
+                ["id" => $id, "codigo_asignatura" => $codigo_asignatura, "asignatura" => $asignatura, "detalle" => $detalle, "id_institucion" => $id_institucion]);
 
                 $msgSuccess = 'Registro '.$id." editado correctamente.";
             }elseif($accion == 3){
@@ -90,7 +90,7 @@ class AsignaturasController extends Controller
             if($msgError == null){
                 $asignaturas = DB::select("SELECT
                         ID,
-                        ID_ASIGNATURA,
+                        CODIGO_ASIGNATURA,
                         ASIGNATURA,
                         DETALLE,
                         ID_INSTITUCION,

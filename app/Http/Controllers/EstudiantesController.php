@@ -14,26 +14,28 @@ class EstudiantesController extends Controller
 {
     public function ver_estudiantes($id_institucion){
         $estudiantes = DB::select("SELECT
-                E.ID,
-                E.NUMERO_CUENTA,
-                TRIM(
-                    COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
-                ) AS NOMBRE_ESTUDIANTE,
-                E.PRIMER_NOMBRE,
-                E.SEGUNDO_NOMBRE,
-                E.PRIMER_APELLIDO,
-                E.SEGUNDO_APELLIDO,
-                E.CORREO_ELECTRONICO,
-                E.CELULAR,
-                E.CARRERA,
-                E.CREATED_AT
-            FROM
-                PUBLIC.ESTUDIANTES E
-                JOIN INSTITUCIONES_ESTUDIANTES IE ON E.ID = IE.ID_ESTUDIANTE
-            WHERE
-                E.DELETED_AT IS NULL
-                AND IE.DELETED_AT IS NULL
-                AND IE.ID_INSTITUCION = :id_institucion;", ["id_institucion" => $id_institucion]);
+            SE.ID,
+            SE.ID_SECCION,
+            SE.ID_ESTUDIANTE,
+            E.NUMERO_CUENTA,
+            TRIM(
+                COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
+            ) AS NOMBRE_ESTUDIANTE,
+            E.PRIMER_NOMBRE,
+            E.SEGUNDO_NOMBRE,
+            E.PRIMER_APELLIDO,
+            E.SEGUNDO_APELLIDO,
+            E.CORREO_ELECTRONICO,
+            E.CELULAR,
+            E.CARRERA,
+            SE.OBSERVACIONES,
+            SE.CREATED_AT
+        FROM
+            PUBLIC.SECCIONES_ESTUDIANTES SE
+            JOIN ESTUDIANTES E ON SE.ID_ESTUDIANTE = E.ID
+        WHERE
+            SE.DELETED_AT IS NULL
+            AND SE.ID_SECCION = :id_institucion;", ["id_institucion" => $id_institucion]);
         return view('pages.twacademic.estudiantes')
             ->with('estudiantes', $estudiantes)
             ->with('id_institucion', $id_institucion);

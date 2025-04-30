@@ -51,7 +51,7 @@
                                 @foreach ($asignaturas as $row)
                                 <tr style="font-size: small;">
                                     <td scope="row">{{$row->id}}</td>
-                                    <td scope="row">{{$row->id_asignatura}}</td>
+                                    <td scope="row">{{$row->codigo_asignatura}}</td>
                                     <td scope="row">{{$row->asignatura}}</td>
                                     <td scope="row">{{$row->detalle}}</td>
                                     <td scope="row">
@@ -59,7 +59,7 @@
                                             data-bs-toggle="modal" 
                                             data-bs-target=".modal_asignaturas"
                                             data-id="{{$row->id}}"
-                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-codigo_asignatura="{{$row->codigo_asignatura}}"
                                             data-asignatura="{{$row->asignatura}}"
                                             data-detalle="{{$row->detalle}}"
                                             >
@@ -69,7 +69,7 @@
                                             data-bs-toggle="modal" 
                                             data-bs-target=".modal_eliminar"
                                             data-id="{{$row->id}}"
-                                            data-id_asignatura="{{$row->id_asignatura}}"
+                                            data-codigo_asignatura="{{$row->codigo_asignatura}}"
                                             data-asignatura="{{$row->asignatura}}"
                                             data-detalle="{{$row->detalle}}"
                                             >
@@ -102,8 +102,8 @@
                         <div class="row">
                             <div class="col-lg-2 col-md-12 col-sm-12">
                                 <div class="mb-2">
-                                    <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="id_asignatura" class="form-control" placeholder="Ingresa el ID de la asignatura" />
+                                    <label class="form-label"><strong>Código Asignatura</strong> <font class="text-danger">*</font></label>
+                                    <input type="text" id="codigo_asignatura" class="form-control" placeholder="Ingresa el código de la asignatura" />
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-12 col-sm-12">
@@ -192,7 +192,7 @@
     var btn_activo = true;
     var id_institucion = "{{$id_institucion}}"
     var id = null;
-    var id_asignatura = null;
+    var codigo_asignatura = null;
     var asignatura = null;
     var detalle = null;
     var rowNumber = null; 
@@ -266,10 +266,10 @@
         $("#modal_asignaturas").on("show.bs.modal", function (e) {
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            id_asignatura = triggerLink.data("id_asignatura");
+            codigo_asignatura = triggerLink.data("codigo_asignatura");
             asignatura  = triggerLink.data("asignatura");
             detalle = triggerLink.data("detalle");
-            $("#id_asignatura").val(id_asignatura);
+            $("#codigo_asignatura").val(codigo_asignatura);
             $("#asignatura").val(asignatura);
             $("#detalle").val(detalle);
         });
@@ -278,15 +278,15 @@
             accion = 3;
             var triggerLink = $(e.relatedTarget);
             id = triggerLink.data("id");
-            id_asignatura = triggerLink.data("id_asignatura");
+            codigo_asignatura = triggerLink.data("codigo_asignatura");
             asignatura  = triggerLink.data("asignatura");
             detalle = triggerLink.data("detalle");
-            $("#modal_estudiante").html(id_asignatura);
+            $("#modal_estudiante").html(codigo_asignatura);
         });
 
         $(".modal-footer").on("click", "#btn_eliminar_estudiante", function () { 
             if(btn_activo){
-                guardar_id_asignatura(); 
+                guardar_codigo_asignatura(); 
             }
         }); 
 
@@ -299,11 +299,11 @@
 
 
         $("#btn_guardar_asignatura").on("click", function () {
-            id_asignatura = $("#id_asignatura").val();
+            codigo_asignatura = $("#codigo_asignatura").val();
             asignatura  = $("#asignatura").val();
             detalle = $("#detalle").val();
 
-            if(id_asignatura == null || id_asignatura == ''){
+            if(codigo_asignatura == null || codigo_asignatura == ''){
                 Toast.fire({
                     icon: 'error',
                     title: 'Valor requerido para Periódo Académico.'
@@ -320,7 +320,7 @@
             }
 
             if(btn_activo){
-                guardar_id_asignatura();
+                guardar_codigo_asignatura();
             }
             
 
@@ -328,7 +328,7 @@
 
     });
 
-    function guardar_id_asignatura() {
+    function guardar_codigo_asignatura() {
         btn_activo = false;
         //console.log(accion);
         $.ajax({
@@ -338,7 +338,7 @@
                 accion: accion,
                 id_institucion : id_institucion,
                 id: id,
-                id_asignatura : id_asignatura,
+                codigo_asignatura : codigo_asignatura,
                 asignatura : asignatura,
                 detalle : detalle,
             },
@@ -355,12 +355,12 @@
                     for(var i = 0; i < data.asignaturas.length; i++) { 
                         var row= data.asignaturas[i]; 
                         var nuevaFilaDT=[ 
-                                     row.id,row.id_asignatura,row.asignatura,row.detalle,
+                                     row.id,row.codigo_asignatura,row.asignatura,row.detalle,
                                       '<button type="button" class="btn btn-warning btn-icon btn-xs btn_editar" ' +
                                         'data-bs-toggle="modal" ' +
                                         'data-bs-target=".modal_asignaturas" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-codigo_asignatura="' + row.codigo_asignatura + '" ' +
                                         'data-asignatura="' + row.asignatura + '" ' +
                                             'data-detalle="' + row.detalle + '" ' +
                                             '>'+
@@ -370,7 +370,7 @@
                                         'data-bs-toggle="modal" ' +
                                         'data-bs-target=".modal_eliminar" ' +
                                         'data-id="' + row.id + '" ' +
-                                        'data-id_asignatura="' + row.id_asignatura + '" ' +
+                                        'data-codigo_asignatura="' + row.codigo_asignatura + '" ' +
                                         'data-asignatura="' + row.asignatura + '" ' +
                                             'data-detalle="' + row.detalle + '" ' +
                                             '>'+

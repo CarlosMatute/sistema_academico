@@ -83,6 +83,9 @@
                                             >
                                             <i data-feather="trash-2"></i>
                                         </button>
+                                        <a href="{{url('/instituciones/')}}/{{$id_institucion}}/periodos_academicos/{{$row->id}}/secciones" type="button" class="btn btn-primary btn-icon btn-xs">
+                                            <i data-feather="bookmark"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 @endforeach

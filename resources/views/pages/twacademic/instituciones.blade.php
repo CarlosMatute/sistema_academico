@@ -81,9 +81,9 @@
                                     <a href="{{url('/instituciones/')}}/{{$row->id}}/asignaturas" type="button" class="btn btn-light btn-icon btn-xs">
                                         <i data-feather="book"></i>
                                     </a>
-                                    <a href="{{url('/instituciones/')}}/{{$row->id}}/secciones" type="button" class="btn btn-primary btn-icon btn-xs">
+                                    <!-- <a href="{{url('/instituciones/')}}/{{$row->id}}/secciones" type="button" class="btn btn-primary btn-icon btn-xs">
                                         <i data-feather="bookmark"></i>
-                                    </a>
+                                    </a> -->
                                     </td>
                                 </tr>
                                 @endforeach

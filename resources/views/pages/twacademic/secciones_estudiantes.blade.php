@@ -15,10 +15,10 @@
     <div class="col-12 col-md-12 col-xl-12">
         <div class="alert alert-dark bg-azul-claro" role="alert">
             <h4 class="display-4 d-flex align-items-center">
-                <i data-feather="bookmark" class="me-3" style="width: 45px; height: 45px;"></i>
-                <strong>SECCIONES</strong>
+                <i data-feather="book-open" class="me-3" style="width: 45px; height: 45px;"></i>
+                <strong>MATRÍCULA</strong>
             </h4>
-            <h5 class="lead bg-white"><div class="alert alert-fill-white" role="alert">Módulo de administracion de secciones.</div></h5>
+            <h5 class="lead bg-white"><div class="alert alert-fill-white" role="alert">Módulo de administracion de la matrícula de los estudiantes.</div></h5>
             <br />
             <div class="col-md-3">
                 <a class="btn btn-info btn-sm" id="btn_volver_convenio" href="{{url('instituciones')}}/{{$id_institucion}}/periodos_academicos" data-toggle="tooltip" data-placement="top" title="Regresar a Malla de Validaciones">
@@ -50,7 +50,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($secciones as $row)
+                                @foreach ($secciones_estudiantes as $row)
                                 <tr style="font-size: small;">
                                     <td scope="row">{{$row->id}}</td>
                                     <td scope="row">{{$row->codigo_asignatura}} {{$row->asignatura}}</td>
@@ -121,30 +121,6 @@
                                 <div class="mb-3">
                                     <label class="form-label"><strong>Aula</strong> <font class="text-danger">*</font></label>
                                     <input type="text" id="aula" class="form-control" placeholder="Ingresa el aula" />
-                                </div>
-                            </div>
-                            <!-- <div class="col-lg-2 col-md-12 col-sm-12">
-                                <div class="mb-3">
-                                <label class="form-label"><strong>Periódo Académico</strong> <font class="text-danger">*</font></label>
-                                    <select class="js-example-basic-single form-select" id="id_periodo_academico" data-width="100%">
-                                        <option value="" disabled>Elija una opción</option>
-                                        @foreach($periodos_academicos as $row)
-                                            <option value="{{$row->id}}">{{$row->nombre}}</option>
-                                        @endforeach
-                                    </select>
-                                    <label class="form-label"><strong>ID Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <input type="text" id="id_periodo_academico" class="form-control" placeholder="Ingresa el ID de la asignatura" />
-                                </div>
-                            </div> -->
-                            <div class="col-lg-4 col-md-12 col-sm-12">
-                                <div class="mb-3">
-                                <label class="form-label"><strong>Asignatura</strong> <font class="text-danger">*</font></label>
-                                    <select class="js-example-basic-single form-select" id="id_asignatura" data-width="100%">
-                                        <option value="" disabled>Elija una opción</option>
-                                        @foreach($asignaturas as $row)
-                                            <option value="{{$row->id}}">{{$row->codigo_asignatura}} {{$row->asignatura}}</option>
-                                        @endforeach
-                                    </select>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-12 col-sm-12">

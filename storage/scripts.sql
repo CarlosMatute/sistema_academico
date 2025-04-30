@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS public.periodos_academicos
 CREATE TABLE IF NOT EXISTS public.asignaturas
 (
     id serial,
-	id_asignatura text,
+	codigo_asignatura text,
     asignatura text,
     detalle text,
 	id_institucion integer,
@@ -125,7 +125,7 @@ CREATE TABLE IF NOT EXISTS public.secciones
     id serial,
 	nombre text,
 	aula text,
-	id_institucion integer,
+	id_periodo_academico integer,
     id_asignatura integer,
     hora_inicio time,
 	hora_fin time,
@@ -133,12 +133,32 @@ CREATE TABLE IF NOT EXISTS public.secciones
     updated_at timestamp(0) without time zone,
     deleted_at timestamp(0) without time zone,
     CONSTRAINT secciones_pkey PRIMARY KEY (id),
-	CONSTRAINT fk_id_institucion FOREIGN KEY (id_institucion)
-        REFERENCES instituciones (id) MATCH SIMPLE
+	CONSTRAINT fk_id_periodos_academicos FOREIGN KEY (id_periodo_academico)
+        REFERENCES periodos_academicos (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
 	CONSTRAINT fk_id_asignatura FOREIGN KEY (id_asignatura)
         REFERENCES asignaturas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+CREATE TABLE IF NOT EXISTS public.secciones_estudiantes
+(
+    id serial,
+	id_seccion integer,
+	id_estudiante integer,
+	observaciones text,
+    created_at timestamp(0) without time zone DEFAULT now(),
+    updated_at timestamp(0) without time zone,
+    deleted_at timestamp(0) without time zone,
+    CONSTRAINT secciones_estudiantes_pkey PRIMARY KEY (id),
+	CONSTRAINT fk_id_estudiante FOREIGN KEY (id_estudiante)
+        REFERENCES estudiantes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT fk_id_seccion FOREIGN KEY (id_seccion)
+        REFERENCES secciones (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
