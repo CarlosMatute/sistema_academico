@@ -30,9 +30,9 @@
         <div class="col-12 col-md-12 col-xl-12">
             <div class="card border-secondary">
                 <h5 class="card-header bg-azul text-white d-flex justify-content-between align-items-center">
-                    <span class="text-white"> <i class="text-white icon-lg pb-3px" data-feather="list"></i> Secciones </span>
+                    <span class="text-white"> <i class="text-white icon-lg pb-3px" data-feather="users"></i> Estudiantes Matriculados </span>
                     <button type="button" id="btn_agregar" class="btn btn-azul-claro btn-sm" data-bs-toggle="modal" data-bs-target=".modal_secciones">
-                        <i class="btn-icon-prepend" data-feather="plus" style="width: 20px; height: 20px;"></i> Agregar
+                        <i class="btn-icon-prepend" data-feather="user-plus" style="width: 15px; height: 15px;"></i> Matricular
                     </button>
                 </h5>
                 <div class="card-body">
