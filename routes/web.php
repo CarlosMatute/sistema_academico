@@ -39,6 +39,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/instituciones/{id_institucion}/periodos_academicos/{id_periodo_academico}/secciones', [SeccionesController::class, 'ver_secciones']);
     Route::post('/instituciones/secciones/guardar', [SeccionesController::class, 'guardar_secciones']);
     Route::get('/instituciones/{id_institucion}/periodos_academicos/{id_periodo_academico}/secciones/{id_seccion}/estudiantes', [SeccionesController::class, 'ver_secciones_estudiantes']);
+    Route::post('/instituciones/periodos_academicos/secciones/estudiantes/guardar', [SeccionesController::class, 'guardar_secciones_estudiantes']);
 });
 
 Route::group(['prefix' => 'email'], function(){

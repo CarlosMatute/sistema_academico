@@ -207,9 +207,163 @@ class SeccionesController extends Controller
                 SE.DELETED_AT IS NULL
                 AND SE.ID_SECCION = :id_seccion;", ["id_seccion" => $id_seccion]);
 
+        $estudiantes_sin_matricula = DB::select("SELECT
+                    E.ID,
+                    E.NUMERO_CUENTA,
+                    TRIM(
+                        COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
+                    ) AS NOMBRE_ESTUDIANTE,
+                    E.PRIMER_NOMBRE,
+                    E.SEGUNDO_NOMBRE,
+                    E.PRIMER_APELLIDO,
+                    E.SEGUNDO_APELLIDO,
+                    E.CORREO_ELECTRONICO,
+                    E.CELULAR,
+                    E.CARRERA,
+                    E.CREATED_AT
+                FROM
+                    PUBLIC.ESTUDIANTES E
+                    JOIN INSTITUCIONES_ESTUDIANTES IE ON E.ID = IE.ID_ESTUDIANTE
+                WHERE
+                    E.DELETED_AT IS NULL
+                    AND IE.DELETED_AT IS NULL
+                    AND E.ID NOT IN (
+                        SELECT
+                            SE.ID_ESTUDIANTE
+                        FROM
+                            PUBLIC.SECCIONES_ESTUDIANTES SE
+                            JOIN ESTUDIANTES E ON SE.ID_ESTUDIANTE = E.ID
+                        WHERE
+                            SE.DELETED_AT IS NULL
+                            AND SE.ID_SECCION = :id_seccion
+                    )
+                    AND IE.ID_INSTITUCION = :id_institucion;", ["id_seccion" => $id_seccion, "id_institucion" => $id_institucion]);
+
         return view('pages.twacademic.secciones_estudiantes')
             ->with('secciones_estudiantes', $secciones_estudiantes)
+            ->with('estudiantes_sin_matricula', $estudiantes_sin_matricula)
             ->with('id_institucion', $id_institucion)
-            ->with('id_periodo_academico', $id_periodo_academico);
+            ->with('id_periodo_academico', $id_periodo_academico)
+            ->with('id_seccion', $id_seccion);
+    }
+
+    public function guardar_secciones_estudiantes(Request $request){
+        $accion = $request->accion;
+        $id = $request->id;
+        $id_estudiante_sin_matricula = $request->id_estudiante_sin_matricula;
+        $observaciones_matricula_observacion= $request->observaciones_matricula_observacion;
+        $id_seccion = $request->id_seccion;
+        $msgSuccess = null;
+        $msgError = null;
+        $secciones_estudiantes = null;
+        $estudiantes_sin_matricula = null;
+
+        //dd($request->all());
+        
+        if ($id == null && $accion == 2) {
+            $accion = 1;
+        }
+
+        //DB::beginTransaction();
+        try {
+            //throw new Exception($id_estudiante_sin_matricula);
+            if($accion == 1){
+                $id = collect(\DB::select("INSERT INTO
+                        SECCIONES_ESTUDIANTES (ID_SECCION, ID_ESTUDIANTE, OBSERVACIONES)
+                    VALUES
+                        (:id_seccion, :id_estudiante_sin_matricula, :observaciones_matricula_observacion)
+                    RETURNING ID;",
+                ["id_seccion" => $id_seccion, "id_estudiante_sin_matricula" => $id_estudiante_sin_matricula,
+                 "observaciones_matricula_observacion" => $observaciones_matricula_observacion]))->first();
+
+                $id = $id->id;
+
+                $msgSuccess = 'Registro '.$id." creado correctamente.";
+            }elseif($accion == 2){
+                // DB::select("UPDATE PUBLIC.SECCIONES
+                //     SET
+                //         NOMBRE = :seccion,
+                //         AULA = :aula,
+                //         ID_PERIODO_ACADEMICO = :id_periodo_academico,
+                //         ID_ASIGNATURA = :asignatura,
+                //         HORA_INICIO = :hora_inicio,
+                //         HORA_FIN = :hora_fin,
+                //         UPDATED_AT = NOW()
+                //     WHERE
+                //         ID = :id;",
+                // ["id" => $id, "seccion" => $seccion, "aula" => $aula, "id_periodo_academico" => $id_periodo_academico, "asignatura" => $asignatura,
+                // "hora_inicio" => $hora_inicio, "hora_fin" => $hora_fin]);
+
+                // $msgSuccess = 'Registro '.$id." editado correctamente.";
+            }elseif($accion == 3){
+                DB::select("UPDATE PUBLIC.SECCIONES_ESTUDIANTES SET DELETED_AT = NOW() WHERE ID = :id", ["id" => $id]);
+
+                $msgSuccess = 'Registro '.$id." eliminado correctamente.";
+            }else{
+                $msgError = 'Acción Inválida.';
+            }
+
+            if($msgError == null){
+                $secciones_estudiantes = DB::select("SELECT
+                        SE.ID,
+                        SE.ID_SECCION,
+                        SE.ID_ESTUDIANTE,
+                        E.NUMERO_CUENTA,
+                        TRIM(
+                            COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
+                        ) AS NOMBRE_ESTUDIANTE,
+                        E.PRIMER_NOMBRE,
+                        E.SEGUNDO_NOMBRE,
+                        E.PRIMER_APELLIDO,
+                        E.SEGUNDO_APELLIDO,
+                        E.CORREO_ELECTRONICO,
+                        E.CELULAR,
+                        E.CARRERA,
+                        SE.OBSERVACIONES,
+                        SE.CREATED_AT
+                    FROM
+                        PUBLIC.SECCIONES_ESTUDIANTES SE
+                        JOIN ESTUDIANTES E ON SE.ID_ESTUDIANTE = E.ID
+                    WHERE
+                        SE.DELETED_AT IS NULL
+                        AND SE.ID = :id;", ["id" => $id]);
+            }
+
+            if($accion == 3){
+                $estudiantes_sin_matricula = DB::select("SELECT
+                    E.ID,
+                    E.NUMERO_CUENTA,
+                    TRIM(
+                        COALESCE(TRIM(E.PRIMER_NOMBRE) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_NOMBRE) || ' ', '') || COALESCE(TRIM(E.PRIMER_APELLIDO) || ' ', '') || COALESCE(TRIM(E.SEGUNDO_APELLIDO || ' '), '')
+                    ) AS NOMBRE_ESTUDIANTE,
+                    E.PRIMER_NOMBRE,
+                    E.SEGUNDO_NOMBRE,
+                    E.PRIMER_APELLIDO,
+                    E.SEGUNDO_APELLIDO,
+                    E.CORREO_ELECTRONICO,
+                    E.CELULAR,
+                    E.CARRERA,
+                    E.CREATED_AT
+                FROM
+                    PUBLIC.ESTUDIANTES E
+                    JOIN INSTITUCIONES_ESTUDIANTES IE ON E.ID = IE.ID_ESTUDIANTE
+                WHERE
+                    E.DELETED_AT IS NULL
+                    AND IE.DELETED_AT IS NULL
+                    AND E.ID = :id_estudiante_sin_matricula;", ["id_estudiante_sin_matricula" => $id_estudiante_sin_matricula]);
+            }
+            //DB::commit();
+        } catch (Exception $e) {
+            // Manejo del error
+            //DB::rollback();
+            $msgError = $e->getMessage();
+        }
+
+        return response()->json([
+            "msgSuccess" => $msgSuccess,
+            "msgError" => $msgError,
+            "secciones_estudiantes" => $secciones_estudiantes,
+            "estudiantes_sin_matricula" => $estudiantes_sin_matricula
+        ]);
     }
 }
